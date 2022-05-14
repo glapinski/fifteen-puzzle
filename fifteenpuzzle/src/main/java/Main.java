@@ -12,6 +12,8 @@ public class Main {
         String stats = "stats.txt";
 
         Bfs bfs = new Bfs();
+        Dfs dfs = new Dfs();
+        AStr astr = new AStr();
 
         int[][] finalBoard = {
                 {1, 2, 3, 4},
@@ -22,6 +24,8 @@ public class Main {
         Puzzle puzzleToSolve = new Puzzle(puzzle);
         Puzzle solved = new Puzzle(finalBoard);
 
+
+
         switch(strategy) {
             case "bfs":
                 bfs.bfs(puzzleToSolve, solved, param);
@@ -29,10 +33,5 @@ public class Main {
 
             case "astr":
         }
-
-        int[][] tab = new int[2][3];
-        tab[0][1] = 4;
-        int[][]copiedTab = tab;
-        System.out.println(copiedTab[0][2]);
     }
 }
