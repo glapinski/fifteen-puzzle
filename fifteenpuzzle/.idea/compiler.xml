@@ -9,8 +9,8 @@
         <module name="fifteenpuzzle" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="fifteenpuzzle" target="17" />
+    <bytecodeTargetLevel target="8">
+      <module name="fifteenpuzzle" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -1,37 +1,66 @@
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
+
 public class Main {
     public static void main(String[] args) {
-        //String strategy = args[0];
-        String strategy = "bfs";
-        //String param = args[1];
-        String param = "LRUD";
-        //String puzzle = args[2];
-        String puzzle = "puzzles/4x4_04_00007.txt";
-        //String solution = args[3];
-        String solution = "solution.txt";
-        //String stats = args[4];
-        String stats = "stats.txt";
+        String strategy = args[0];
+        String param = args[1];
+        String puzzle = args[2];
+        String solutionFile = args[3];
+        String stats = args[4];
+
+        BigDecimal startTime = BigDecimal.valueOf(0);
+        BigDecimal endTime = BigDecimal.valueOf(0);
+        BigDecimal elapsedTime;
+
 
         Bfs bfs = new Bfs();
         Dfs dfs = new Dfs();
         AStr astr = new AStr();
 
-        int[][] finalBoard = {
-                {1, 2, 3, 4},
-                {5, 6, 7, 8},
-                {9, 10, 11, 12},
-                {13, 14, 15, 0}
-        };
         Puzzle puzzleToSolve = new Puzzle(puzzle);
-        Puzzle solved = new Puzzle(finalBoard);
+        Puzzle solution;
 
+        switch (strategy) {
+                case "bfs":
+                    startTime = BigDecimal.valueOf(System.nanoTime());
+                    solution = bfs.bfs(puzzleToSolve, param);
+                    endTime = BigDecimal.valueOf(System.nanoTime());
+                    break;
+                case "dfs":
+                    startTime = BigDecimal.valueOf(System.nanoTime());
+                    solution = dfs.dfs(puzzleToSolve, param);
+                    endTime = BigDecimal.valueOf(System.nanoTime());
+                    break;
+                 case "astr":
+                     startTime = BigDecimal.valueOf(System.nanoTime());
+                     solution = astr.Astr(puzzleToSolve,param);
+                     endTime = BigDecimal.valueOf(System.nanoTime());
+                     break;
+                default:
+                    solution = puzzleToSolve;
+        }
+        elapsedTime = endTime.subtract(startTime);
+        elapsedTime = elapsedTime.divide(BigDecimal.valueOf(1000000));
 
-
-        switch(strategy) {
-            case "bfs":
-                bfs.bfs(puzzleToSolve, solved, param);
-            case "dfs":
-
-            case "astr":
+        if(!"dfs".equals(strategy)){
+            solution.solutionSize = solution.solutionPath.length();
+        }
+        try (PrintWriter print = new PrintWriter(solutionFile)) {
+            print.println(solution.solutionSize);
+            print.println(solution.solutionPath);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try (PrintWriter print = new PrintWriter(stats)) {
+            print.println(solution.solutionSize);
+            print.println(solution.visitedStates);
+            print.println(solution.processedStates);
+            print.println(solution.depth);
+            print.println(elapsedTime);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }

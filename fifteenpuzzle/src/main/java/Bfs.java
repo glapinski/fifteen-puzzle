@@ -9,27 +9,27 @@ public class Bfs {
 
     }
 
-    public Puzzle bfs(Puzzle startingPuzzle, Puzzle finalPuzzle, String order) {
-        if(startingPuzzle.equals(finalPuzzle)) {
+    public Puzzle bfs(Puzzle startingPuzzle, String order) {
+        Results results = new Results();
+        if(startingPuzzle.isGoal()) {
             return startingPuzzle;
         }
-        Queue<Puzzle> queueList = new LinkedList<>();
-        Set<Puzzle> closedList = new HashSet<>();
-        queueList.add(startingPuzzle);
-        closedList.add(startingPuzzle);
-        while(!queueList.isEmpty()) {
-            Puzzle v = queueList.remove();
+        Queue<Puzzle> Q = new LinkedList<>();
+        Set<Puzzle> U = new HashSet<>();
+        Q.add(startingPuzzle);
+        U.add(startingPuzzle);
+        while(!Q.isEmpty()) {
+            Puzzle v = Q.remove();
             v.getNeighbours(order);
-            for (Puzzle tmpPuzzle : v.neighbours)
+            for (Puzzle n : v.neighbours)
             {
-                if (tmpPuzzle.equals(finalPuzzle)) {
-                    tmpPuzzle.processedStates = closedList.size();
-                    tmpPuzzle.visitedStates = tmpPuzzle.processedStates + queueList.size();
-                    return tmpPuzzle;
+                if (n.isGoal()) {
+                    results.makeStatsBFS(n, U.size(), U.size() + Q.size());
+                    return n;
                 }
-                if (!closedList.contains(tmpPuzzle)) {
-                    queueList.add(tmpPuzzle);
-                    closedList.add(tmpPuzzle);
+                if (!U.contains(n)) {
+                    Q.add(n);
+                    U.add(n);
                 }
             }
         }
